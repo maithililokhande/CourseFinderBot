@@ -1,0 +1,166 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "skill-based course",
+        "formDescription": "automated skill-based course recommendation system build an automated n8n workflow where a user submits the skill they want to learn through a form, and the system automatically finds the best courses for that skill from different platforms like udemy, coursera, etc., and sends them directly to the user’s telegram via a bot.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Skill"
+            },
+            {
+              "fieldLabel": "Course Type",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Free Only"
+                  },
+                  {
+                    "option": "Paid Only"
+                  },
+                  {
+                    "option": "Both"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -96,
+        64
+      ],
+      "id": "YOUR_id_TOKEN",
+      "name": "On form submission",
+      "webhookId": "YOUR_web_TOKEN"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "YOUR_id_TOKEN",
+              "leftValue": "=Selected Course Type: {{$json[\"Course Type\"]}}\n",
+              "rightValue": "Free Only",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        224,
+        64
+      ],
+      "id": "YOUR_id_TOKEN",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_CHAT_ID",
+        "text": "=🎯 Course Fee Details for \"{{$json[\"Skill\"]}}\" 👇\n\n🆓 freeCodeCamp  \nCourse Fee: ₹0 (Completely FREE)  \nhttps://www.freecodecamp.org/news/search/?query={{$json[\"Skill\"]}}\n\n🆓 edX  \nCourse Fee: FREE to learn (Certificate Paid Optional)  \nhttps://www.edx.org/search?q={{$json[\"Skill\"]}}&price=free\n\n🆓 Coursera  \nCourse Fee: FREE (Audit Mode Available)  \nhttps://www.coursera.org/search?query={{$json[\"Skill\"]}}&price=free\n\n🆓 YouTube  \nCourse Fee: ₹0 (Free Tutorials)  \nhttps://www.youtube.com/results?search_query={{$json[\"Skill\"]}}+course\n\nHappy Learning 🚀\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        400,
+        160
+      ],
+      "id": "YOUR_id_TOKEN",
+      "name": "Telegram - Free",
+      "webhookId": "YOUR_web_TOKEN",
+      "credentials": {
+              }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_CHAT_ID",
+        "text": "=🎯 Course Fee Details for \"{{$json[\"Skill\"]}}\" 👇\n\n💰 Udemy  \nCourse Fee: Paid (Usually ₹399 – ₹3,499 depending on discounts)  \nhttps://www.udemy.com/courses/search/?q={{$json[\"Skill\"]}}\n\n💰 Coursera  \nCourse Fee: Paid Certificate (Approx ₹3,000 – ₹6,000 per course)  \nhttps://www.coursera.org/search?query={{$json[\"Skill\"]}}\n\n💰 edX  \nCourse Fee: Paid Verified Certificate (Approx ₹4,000+)  \nhttps://www.edx.org/search?q={{$json[\"Skill\"]}}\n\n💡 Note:\nExact fees may vary depending on offers and region.\n\nHappy Learning 🚀",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        400,
+        -48
+      ],
+      "id": "YOUR_id_TOKEN",
+      "name": "Telegram - Paid/Both",
+      "webhookId": "YOUR_web_TOKEN",
+      "credentials": {
+                }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram - Free": {
+      "main": [
+        []
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Telegram - Free",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram - Paid/Both",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "de79fe2c-dcbc-4209-abdb-12547b1ccf65",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+   .....
+  },
+  "id": "MKsSwbO6y9RxipaU",
+  "tags": []
+}
